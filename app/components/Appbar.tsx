@@ -11,7 +11,7 @@ const Appbar = () => {
             DCEX
         </div>
         <div>
-            {session.data?.user ? <PrimaryButton onClick={() => signOut()}>Logout</PrimaryButton> : <PrimaryButton onClick={() => signIn()}>signin</PrimaryButton>}
+            {session.data?.user ? <PrimaryButton onClick={() => signOut()}>Logout</PrimaryButton> : <PrimaryButton onClick={() => signIn(undefined, { callbackUrl: "/dashboard" })}>Sign in</PrimaryButton>}
         </div>
 
        

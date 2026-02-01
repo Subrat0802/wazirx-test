@@ -1,10 +1,11 @@
 'use client'
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import PrimaryButton from './Button';
+import { useEffect, useState } from 'react';
 
 
-const ProfileCard = () => {
-  
+const ProfileCard = ({ publicKey }: { publicKey: string }) => {
   const session = useSession();
   const router = useRouter();
 
@@ -22,9 +23,9 @@ const ProfileCard = () => {
   return (
     <div className="flex max-w-7xl min-h-[80dvh] mx-auto justify-center items-center border p-20">
       <div className="w-[80%] p-20 border flex justify-center items-center">
-        <div className="w-full h-full">
+        <div className="w-full h-full text-wrap">
           <Greeting name={session.data?.user?.name ?? ""}/>
-          <Assets />
+          <Assets publicKey={publicKey}/>
         </div>
         
       </div>
@@ -41,8 +42,34 @@ const Greeting = ({name}: {name: string}) => {
 }
 
 
-const Assets = () => {
-  return <div className="text-white/70 mt-3">
-    Account assets
+const Assets = ({publicKey}: {
+  publicKey: string
+}) => {
+
+  const [copied, setCopiend] = useState(false);
+
+  useEffect(() => {
+    if(copied) {
+      const interval = setTimeout(() => {
+        setCopiend(false)
+      }, 3000);
+      return () => {
+        clearInterval(interval);
+      }
+    }
+  }, [copied]);
+
+  return <div className="text-white/70 mt-3 flex justify-between items-center">
+    <p className='text-2xl font-semibold'>Account assets</p>
+    <div>
+      <PrimaryButton onClick={() => {
+        navigator.clipboard.writeText(publicKey);
+        setCopiend(true);
+      }}>{copied ? "copied" : "Copy address"}</PrimaryButton>
+    </div>
+
+    <div>
+      
+    </div>
   </div>
 }
